@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Pastel Support Desk - Overclock Kawaii Shop{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto my-8 px-4">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-[#DE6FA1] mb-2">🎀 Tech Support & RMA Center 🌸</h1>
+        <p class="text-sm text-[#88747A]">Need component setup help or a warranty return? Let us assist you! ✨</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <form method="POST" class="md:col-span-1 bg-white rounded-3xl border-4 border-[#FFD1DC] p-5 shadow-md space-y-4 h-fit">
+            {% csrf_token %}
+            <h2 class="text-lg font-bold text-[#5C4B51] border-b-2 border-dashed border-[#FFD1DC] pb-1">Open a Case</h2>
+            
+            <div>
+                <label class="block text-xs font-bold text-[#88747A] mb-1">Inquiry Type</label>
+                <select name="ticket_type" class="w-full p-2.5 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-xl text-xs focus:outline-none focus:border-[#DE6FA1]">
+                    <option value="TECH">Technical Help 🧠</option>
+                    <option value="RMA">Warranty Claim (RMA) 🌸</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#88747A] mb-1">Subject Title</label>
+                <input type="text" name="subject" required placeholder="My graphics card fan won't turn pink" class="w-full p-2.5 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-xl text-xs focus:outline-none focus:border-[#DE6FA1]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#88747A] mb-1">Detailed Message Description</label>
+                <textarea name="message" rows="4" required placeholder="Describe what went wrong..." class="w-full p-2.5 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-xl text-xs focus:outline-none focus:border-[#DE6FA1]"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-[#DE6FA1] text-white font-bold py-2 px-4 rounded-xl border-b-4 border-[#B85383] text-xs hover:bg-[#FFB7B2] active:scale-95 transition-all shadow-sm">
+                Transmit Ticket 💖
+            </button>
+        </form>
+
+        <div class="md:col-span-2 bg-white rounded-3xl border-4 border-[#FFD1DC] p-6 shadow-md">
+            <h2 class="text-lg font-bold text-[#DE6FA1] border-b-2 border-dashed border-[#FFD1DC] pb-2 mb-4">Your Case History Log</h2>
+            
+            <div class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
+                {% for ticket in tickets %}
+                <div class="border-2 border-[#FFD1DC] rounded-2xl p-4 bg-[#FFF5F5] transition-all hover:bg-white">
+                    <div class="flex flex-wrap justify-between items-start gap-2 mb-2">
+                        <div>
+                            <span class="inline-block bg-[#FFD1DC] text-[#DE6FA1] font-bold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider">
+                                {{ ticket.get_ticket_type_display }}
+                            </span>
+                            <h3 class="text-base font-bold text-[#5C4B51] mt-1">{{ ticket.subject }}</h3>
+                        </div>
+                        
+                        {% if ticket.status == 'PENDING' %}
+                            <span class="bg-yellow-100 text-yellow-700 text-xs font-bold px-2.5 py-1 rounded-md border border-yellow-300">Processing Request ✨</span>
+                        {% elif ticket.status == 'APPROVED' %}
+                            <span class="bg-green-100 text-green-700 text-xs font-bold px-2.5 py-1 rounded-md border border-green-300">Label Ready 🎀</span>
+                        {% else %}
+                            <span class="bg-[#E2F0CB] text-[#5B8226] text-xs font-bold px-2.5 py-1 rounded-md border border-[#5B8226]">Completed 💕</span>
+                        {% endif %}
+                    </div>
+                    <p class="text-xs text-[#88747A] whitespace-pre-wrap leading-relaxed">{{ ticket.message }}</p>
+                    <span class="block text-[10px] text-[#B48E92] mt-2 border-t border-dashed border-[#FFD1DC] pt-2">Filed on: {{ ticket.created_at|date:"Y-m-d H:i" }}</span>
+                </div>
+                {% empty %}
+                <div class="text-center py-8 text-[#88747A] border-2 border-dashed border-[#FFD1DC] rounded-2xl bg-white">
+                    <p class="text-xs font-medium">You don't have any open support or replacement cases yet. Everything is flawless! ✨</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

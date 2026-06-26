@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Overclock Kawaii Shop{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300..700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Fredoka', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-[#FFF9F9] min-h-screen flex flex-col justify-between text-[#5C4B51]">
+
+    <header class="w-full px-4">
+        <nav class="bg-white border-b-4 border-[#FFD1DC] px-6 py-4 flex justify-between items-center max-w-6xl mx-auto rounded-full my-4 shadow-sm">
+            
+            <a href="{% url 'index' %}" class="text-xl font-bold text-[#DE6FA1] flex items-center space-x-2 hover:opacity-90 transition-opacity">
+                <span>🌸</span> 
+                <span>Overclock PC <span class="text-xs bg-[#FFD1DC] text-[#DE6FA1] px-2 py-0.5 rounded-full font-mono font-normal">UwU</span></span>
+            </a>
+
+            <!-- Inside app_1/templates/base.html -> Navbar Links Section -->
+<div class="flex items-center space-x-6">
+    
+    <!-- 🏠 New Home Button -->
+    <a href="{% url 'index' %}" class="text-[#DE6FA1] hover:text-[#B48E92] font-bold text-sm flex items-center space-x-1 transition-transform duration-150 hover:scale-105">
+        <span>🏠</span> <span>Home</span>
+    </a>
+
+    <!-- 🏷️ Professional Categories Dropdown Component -->
+    <div class="relative group">
+        <button class="text-[#DE6FA1] hover:text-[#B48E92] font-bold text-sm flex items-center space-x-1 focus:outline-none transition-transform duration-150 hover:scale-105">
+            <span>🏷️</span> <span>Categories</span>
+            <svg class="w-4 h-4 fill-current pt-0.5 ml-0.5" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </button>
+        <!-- Dropdown Hover Panel -->
+        <div class="absolute left-0 w-48 bg-white border-2 border-[#FFD1DC] rounded-2xl shadow-xl py-2 mt-1 hidden group-hover:block z-50 transition-all">
+            <a href="{% url 'index' %}" class="block px-4 py-2 text-xs font-bold text-[#5C4B51] hover:bg-[#FFF5F5] hover:text-[#DE6FA1]">✨ All Hardware Components</a>
+            <div class="border-t border-dashed border-[#FFD1DC] my-1"></div>
+            <!-- Links mapping specific category slugs -->
+            <a href="{% url 'index' %}?category=cpus" class="block px-4 py-2 text-xs text-[#88747A] hover:bg-[#FFF5F5] hover:text-[#DE6FA1] font-medium">🧠 Processors (CPUs)</a>
+            <a href="{% url 'index' %}?category=gpus" class="block px-4 py-2 text-xs text-[#88747A] hover:bg-[#FFF5F5] hover:text-[#DE6FA1] font-medium">🌸 Graphics Cards (GPUs)</a>
+            <a href="{% url 'index' %}?category=cases" class="block px-4 py-2 text-xs text-[#88747A] hover:bg-[#FFF5F5] hover:text-[#DE6FA1] font-medium">🕋 Computer Cases</a>
+        </div>
+    </div>
+
+    <!-- Persistent Shopping Cart Link -->
+    <a href="{% url 'cart_view' %}" class="text-[#DE6FA1] hover:text-[#B48E92] font-bold text-sm flex items-center space-x-1 transition-transform duration-150 hover:scale-105">
+        <span>🛒</span> <span>Cart</span>
+    </a>
+
+    <!-- PC Builder Link -->
+    <a href="{% url 'builder_view' %}" class="text-[#DE6FA1] hover:text-[#B48E92] font-bold text-sm flex items-center space-x-1 transition-transform duration-150 hover:scale-105">
+        <span>🛠️</span> <span>PC Builder</span>
+    </a>
+
+    <!-- Support Center Link -->
+    <a href="{% url 'support_view' %}" class="text-[#DE6FA1] hover:text-[#B48E92] font-bold text-sm flex items-center space-x-1 transition-transform duration-150 hover:scale-105">
+        <span>🤝</span> <span>Support Center</span>
+    </a>
+
+</div>
+
+
+    <!-- Dynamic Authentication Links -->
+    <div class="space-x-4 flex items-center border-l-2 border-dashed border-[#FFD1DC] pl-6">
+
+                <div class="space-x-4 flex items-center border-l-2 border-dashed border-[#FFD1DC] pl-6">
+                    {% if user.is_authenticated %}
+                        <span class="text-[#DE6FA1] font-semibold text-sm">
+                            Hi, <span class="bg-white px-2 py-1 rounded-full border border-[#FFD1DC] font-bold text-[#DE6FA1]">{{ user.username }}</span> ✨
+                        </span>
+                        <a href="{% url 'logout' %}" class="bg-[#B48E92] hover:bg-[#88747A] text-white px-4 py-2 rounded-full font-bold shadow-sm hover:scale-105 transition-all text-sm">
+                            Logout 👋
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="text-[#DE6FA1] font-semibold hover:text-[#B48E92] transition-colors">Login</a>
+                        <a href="{% url 'register' %}" class="bg-[#DE6FA1] text-white px-4 py-2 rounded-full font-bold border-2 border-white shadow-sm hover:bg-[#FFB7B2] transition-colors">Register ✨</a>
+                    {% endif %}
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    {% if messages %}
+    <div class="max-w-xl mx-auto w-full px-4 mt-2">
+        {% for message in messages %}
+        <div class="text-center p-3 rounded-2xl border-2 font-medium text-sm shadow-sm bg-white border-[#FFD1DC] text-[#DE6FA1]">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <main class="flex-grow w-full">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="w-full text-center py-6 border-t border-dashed border-[#FFD1DC] bg-white text-xs text-[#B48E92] mt-12">
+        <p>© 2026 Overclock Kawaii PC Shop. Imperfection is beauty. ✨ All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

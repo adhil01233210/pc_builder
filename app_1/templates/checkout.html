@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Secure Checkout - Overclock Kawaii Shop{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto my-8 px-4">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-[#DE6FA1] mb-2">💳 Order Checkout Secure Desk 🌸</h1>
+        <p class="text-sm text-[#88747A]">Review your final receipt summary details below before routing shipment!</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Delivery Details Form Input Column -->
+        <form method="POST" class="md:col-span-2 bg-white rounded-3xl border-4 border-[#FFD1DC] p-6 shadow-md space-y-4">
+            {% csrf_token %} <!-- Paste this correct one right here! -->
+            <h2 class="text-xl font-bold text-[#5C4B51] border-b-2 border-dashed border-[#FFD1DC] pb-2">Shipping Information</h2>
+            
+            <div>
+                <label class="block text-xs font-bold text-[#88747A] mb-1">Full Legal Name</label>
+                <input type="text" required placeholder="Cardcaptor Sakura" class="w-full p-3 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-xl text-sm focus:outline-none focus:border-[#DE6FA1]">
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-[#88747A] mb-1">Destination Shipping Address</label>
+                <input type="text" required placeholder="123 Pastel Ribbon Lane, Floor 4" class="w-full p-3 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-xl text-sm focus:outline-none focus:border-[#DE6FA1]">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-[#88747A] mb-1">City / Hub</label>
+                    <input type="text" required placeholder="Neo-Tokyo" class="w-full p-3 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-xl text-sm focus:outline-none focus:border-[#DE6FA1]">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-[#88747A] mb-1">Postal Zip Code</label>
+                    <input type="text" required placeholder="679341" class="w-full p-3 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-xl text-sm focus:outline-none focus:border-[#DE6FA1]">
+                </div>
+            </div>
+
+            <div class="pt-4">
+                <button type="submit" class="w-full bg-[#DE6FA1] text-white font-bold py-3.5 px-4 rounded-2xl border-b-4 border-[#B85383] text-sm hover:bg-[#FFB7B2] active:scale-95 transition-all shadow-md">
+                    Submit Simulated Order Payment 🌸
+                </button>
+            </div>
+        </form>
+
+        <!-- Final Invoice Breakdown Summary Panel -->
+        <div class="bg-white rounded-3xl border-4 border-[#FFD1DC] p-6 shadow-md flex flex-col justify-between h-fit">
+            <div>
+                <h2 class="text-lg font-bold text-[#DE6FA1] border-b-2 border-dashed border-[#FFD1DC] pb-2 text-center">Invoice Summary</h2>
+                
+                <div class="divide-y divide-dashed divide-[#FFD1DC] max-h-60 overflow-y-auto pr-1 my-3">
+                    {% for item in cart_items %}
+                    <div class="py-2.5 flex justify-between items-center text-xs">
+                        <div class="pr-2">
+                            <span class="font-bold text-[#5C4B51] block">{{ item.product.name }}</span>
+                            <span class="text-[#88747A]">Qty: {{ item.quantity }} × ${{ item.product.price }}</span>
+                        </div>
+                        <span class="font-bold text-[#DE6FA1] ml-auto">${{ item.total_price }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="pt-3 border-t-2 border-[#FFD1DC] flex justify-between items-center bg-[#FFF5F5] p-3 rounded-xl">
+                    <span class="font-bold text-sm text-[#5C4B51]">Grand Total:</span>
+                    <span class="text-xl font-black text-[#DE6FA1]">${{ grand_total }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

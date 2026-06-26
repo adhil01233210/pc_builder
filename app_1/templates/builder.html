@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block title %}PC Builder Simulator - Overclock Kawaii Shop{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto my-8 px-4">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-[#DE6FA1] mb-2">🛠️ Custom PC Rig Configurator 🌸</h1>
+        <p class="text-sm text-[#88747A]">Select your dream hardware layers and check system metrics live!</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="md:col-span-2 bg-white rounded-3xl border-4 border-[#FFD1DC] p-6 shadow-md space-y-5">
+            <h2 class="text-xl font-bold text-[#5C4B51] border-b-2 border-dashed border-[#FFD1DC] pb-2">Select Components</h2>
+            
+            <div>
+                <label class="block text-sm font-bold text-[#88747A] mb-1">Processor (CPU) 🧠</label>
+                <select id="cpu-select" class="w-full p-3 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-2xl text-sm focus:outline-none focus:border-[#DE6FA1]" onchange="updateRigInfo()">
+                    <option value="0" data-price="0" data-watt="0">-- Choose a CPU --</option>
+                    {% for product in cpus %}
+                        <option value="{{ product.id }}" data-price="{{ product.price }}" data-watt="125">{{ product.name }} (+${{ product.price }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-[#88747A] mb-1">Graphics Card (GPU) 🎮</label>
+                <select id="gpu-select" class="w-full p-3 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-2xl text-sm focus:outline-none focus:border-[#DE6FA1]" onchange="updateRigInfo()">
+                    <option value="0" data-price="0" data-watt="0">-- Choose a GPU --</option>
+                    {% for product in gpus %}
+                        <option value="{{ product.id }}" data-price="{{ product.price }}" data-watt="280">{{ product.name }} (+${{ product.price }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-[#88747A] mb-1">Chassis / Case 🕋</label>
+                <select id="case-select" class="w-full p-3 bg-[#FFF5F5] border-2 border-[#FFD1DC] rounded-2xl text-sm focus:outline-none focus:border-[#DE6FA1]" onchange="updateRigInfo()">
+                    <option value="0" data-price="0" data-watt="0">-- Choose a Chassis --</option>
+                    {% for product in cases %}
+                        <option value="{{ product.id }}" data-price="{{ product.price }}" data-watt="20">{{ product.name }} (+${{ product.price }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl border-4 border-[#FFD1DC] p-6 shadow-md flex flex-col justify-between h-fit space-y-6">
+            <div>
+                <h2 class="text-xl font-bold text-[#DE6FA1] border-b-2 border-dashed border-[#FFD1DC] pb-2 text-center">Rig Diagnostics</h2>
+                
+                <div class="mt-4 text-center">
+                    <span class="text-xs font-bold text-[#88747A] block uppercase">Estimated Build Cost</span>
+                    <span id="live-total" class="text-3xl font-black text-[#DE6FA1]">$0.00</span>
+                </div>
+
+                <div class="mt-4 bg-[#FFF5F5] p-3 rounded-xl border border-[#FFD1DC]">
+                    <span class="text-xs font-bold text-[#5C4B51] block">Minimum Power Draw:</span>
+                    <span id="live-power" class="text-lg font-bold text-[#DE6FA1]">0 Watts</span>
+                    <p class="text-[10px] text-[#88747A] mt-1">Recommended PSU: <span id="rec-psu" class="font-bold text-[#5B8226]">450W</span></p>
+                </div>
+
+                <div class="mt-4">
+                    <span class="text-xs font-bold text-[#5C4B51] block mb-1">System Status:</span>
+                    <div id="compat-badge" class="bg-[#E2F0CB] text-[#5B8226] font-bold text-xs text-center py-2 rounded-xl border border-dashed border-[#5B8226]">
+                        Perfect Compatibility! 💖
+                    </div>
+                </div>
+            </div>
+
+            <button class="w-full bg-[#DE6FA1] text-white font-bold py-3 px-4 rounded-2xl border-b-4 border-[#B85383] text-sm hover:bg-[#FFB7B2] active:scale-95 transition-all">
+                Export Layout Draft 📄
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateRigInfo() {
+    const cpu = document.getElementById('cpu-select').selectedOptions[0];
+    const gpu = document.getElementById('gpu-select').selectedOptions[0];
+    const pcCase = document.getElementById('case-select').selectedOptions[0];
+
+    // Read attributes
+    const totalCost = parseFloat(cpu.dataset.price) + parseFloat(gpu.dataset.price) + parseFloat(pcCase.dataset.price);
+    const totalWatts = parseInt(cpu.dataset.watt) + parseInt(gpu.dataset.watt) + parseInt(pcCase.dataset.watt);
+
+    // Update fields
+    document.getElementById('live-total').innerText = `$${totalCost.toFixed(2)}`;
+    document.getElementById('live-power').innerText = `${totalWatts} Watts`;
+    
+    // Recommend a Power Supply unit with a healthy overhead limit
+    const psuRecommendation = totalWatts > 0 ? Math.ceil((totalWatts + 150) / 50) * 50 : 450;
+    document.getElementById('rec-psu').innerText = `${psuRecommendation}W`;
+
+    // Fast Mock Compatibility Flag Check
+    const badge = document.getElementById('compat-badge');
+    if (totalWatts > 400) {
+        badge.innerText = "Warning: High Thermal Draw! 🌡️";
+        badge.className = "bg-[#FFB7B2] text-[#B44B4B] font-bold text-xs text-center py-2 rounded-xl border border-dashed border-[#B44B4B]";
+    } else {
+        badge.innerText = "Perfect Compatibility! 💖";
+        badge.className = "bg-[#E2F0CB] text-[#5B8226] font-bold text-xs text-center py-2 rounded-xl border border-dashed border-[#5B8226]";
+    }
+}
+</script>
+{% endblock %}

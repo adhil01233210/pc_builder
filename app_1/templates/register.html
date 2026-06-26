@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Register - Overclock Kawaii Shop{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto my-8">
+    <div class="bg-white rounded-3xl border-4 border-[#FFD1DC] p-8 shadow-lg">
+        
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-bold text-[#DE6FA1] mb-1">Join the Oasis! 🎀</h2>
+            <p class="text-sm text-[#88747A]">Create an account to start building your dream rig.</p>
+        </div>
+
+        <form method="POST" class="space-y-4">
+            {% csrf_token %}
+            
+            <div>
+                <label class="block text-sm font-bold text-[#5C4B51] mb-1 pl-1">Username 🌸</label>
+                <input type="text" name="username" required placeholder="Choose a cute username..." 
+                       class="w-full px-4 py-2.5 bg-[#FFF5F5] rounded-2xl border-2 border-[#FFD1DC] focus:outline-none focus:border-[#DE6FA1] text-[#5C4B51]">
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-[#5C4B51] mb-1 pl-1">Email Address ✉️</label>
+                <input type="email" name="email" required placeholder="yourname@example.com" 
+                       class="w-full px-4 py-2.5 bg-[#FFF5F5] rounded-2xl border-2 border-[#FFD1DC] focus:outline-none focus:border-[#DE6FA1] text-[#5C4B51]">
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-[#5C4B51] mb-1 pl-1">Password 🔐</label>
+                <input type="password" name="password" required placeholder="Create a strong password..." 
+                       class="w-full px-4 py-2.5 bg-[#FFF5F5] rounded-2xl border-2 border-[#FFD1DC] focus:outline-none focus:border-[#DE6FA1] text-[#5C4B51]">
+            </div>
+
+            <div>
+                <label class="block text-sm font-bold text-[#5C4B51] mb-1 pl-1">Confirm Password 💕</label>
+                <input type="password" name="password_confirm" required placeholder="Type it one more time!..." 
+                       class="w-full px-4 py-2.5 bg-[#FFF5F5] rounded-2xl border-2 border-[#FFD1DC] focus:outline-none focus:border-[#DE6FA1] text-[#5C4B51]">
+            </div>
+
+            <button type="submit" 
+                    class="w-full bg-[#DE6FA1] hover:bg-[#FFB7B2] text-white font-bold py-3 px-4 rounded-full border-b-4 border-[#B85383] hover:border-[#E89E99] active:scale-95 transition-all duration-150 shadow-md mt-2">
+                Sign Me Up! ✨
+            </button>
+        </form>
+
+        <div class="text-center mt-5 pt-4 border-t border-dashed border-[#FFD1DC]">
+            <p class="text-sm text-[#88747A]">
+                Already have an account? 
+                <a href="{% url 'login' %}" class="text-[#DE6FA1] font-bold hover:underline ml-1">Log in here!</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
